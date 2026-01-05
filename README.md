@@ -74,23 +74,25 @@ created_at
 updated_at
 
 ## 👤 UserProfile
-
+```
 id
 user (OneToOne → User)
 full_name
 address
 phone
 date_of_birth
+```
 
 ## 💖 Wishlist
-
+```
 id
 user (FK → User)
 book (FK → Book)
 added_at
+```
 
 ## ⭐ Rating & Review
-
+```
 id
 user (FK → User)
 book (FK → Book)
@@ -98,19 +100,21 @@ rating (1-5)
 review_text
 created_at
 updated_at
+```
 
 
 ## 4️⃣ Funksional talablar
 
 ## 🔐 Authentication & Authorization
-
+```
 User register/login
 
 JWT access & refresh token
 
 Role-based permission (Admin / User)
-
+```
 ## 👤 User imkoniyatlari
+```
 
 Kitoblarni ko‘rib chiqish
 
@@ -129,8 +133,10 @@ Profilni boshqarish (UserProfile)
 Wishlistga kitob qo‘shish / o‘chirish
 
 Kitoblarga reyting va sharh qo‘yish
+```
 
 ## 🛡 Admin imkoniyatlari
+```
 
 Kitob CRUD (Create, Read, Update, Delete)
 
@@ -143,8 +149,10 @@ Qolmagan kitoblar ro‘yxatini ko‘rish
 Foydalanuvchi buyurtmalarini ko‘rish va ID kodlarni tekshirish
 
 Foydalanuvchi profillari va sharhlarni boshqarish
+```
 
 ## 5️⃣ Business Logic / Validation
+```
 
 ❌ Kitob soni 0 dan kam bo‘lmasligi kerak
 
@@ -159,6 +167,7 @@ Foydalanuvchi profillari va sharhlarni boshqarish
 ✅ Wishlistdagi kitoblarni faqat o‘zi ko‘ra oladi
 
 ✅ Reyting 1-5 oralig‘ida bo‘lish
+```
 
 
 ## 6️⃣ API Endpointlar (minimum requirement)
