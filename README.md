@@ -1,269 +1,231 @@
+# 📚 FINAL EXAM PROJECT
 
-# 📚 Bookstore – E-Commerce Web Application
+## **Book Store – E-Commerce Backend API**
 
+### 🎯 Maqsad
 
----
+Kitob do‘koni uchun mo‘ljallangan **kichik e-commerce tizim** yaratish orqali talabaning:
 
-## 🎯 Maqsad
-Kitob do‘koni uchun kichik e-commerce tizim yaratish:
+- REST API dizayn
+- Authentication & Authorization
+- Business logic
+- Admin & User flow
+- Real savdo jarayoni mantiqi
 
-* REST API dizayn
-* Authentication & Authorization (JWT, Permission)
-* Business Logic & Validation
-* Performance (ORM optimizatsiya)
-* API hujjatlashtirish
-
-Foydalanuvchi onlayn kitob tanlaydi, savatchaga qo‘shadi, ro‘yxatdan o‘tadi va xarid qiladi. Admin esa kitoblarni boshqaradi, sotuvlarni ko‘radi va ID kodlarni tekshiradi.
-
----
-
-## 1️⃣ Texnologiyalar (majburiy)
-* Python 3.x
-* Django
-* Django Rest Framework (DRF)
-* JWT Authentication (`djangorestframework-simplejwt`)
-* PostgreSQL
-* Swagger / Redoc (`drf-spectacular`)
-* `.env` (environment variables)
-* Git + GitHub (public repository)
+bo‘yicha ko‘nikmalarini baholash.
 
 ---
 
-## 2️⃣ Foydalanuvchi rollari
+## 1️⃣ TEXNOLOGIYALAR (MAJBURIY)
 
-| Role        | Tavsif                                                       |
-| ----------- | ------------------------------------------------------------ |
-| **Admin**   | Tizimdagi barcha kitoblar va xaridlarni boshqaradi           |
-| **User**    | Kitoblarni ko‘rib chiqadi, savatchaga qo‘shadi va xarid qiladi, profilni boshqaradi, wishlist va sharhlar qo‘shadi |
+- Python 3.x  
+- Django  
+- Django Rest Framework (DRF)  
+- JWT Authentication (`djangorestframework-simplejwt`)  
+- PostgreSQL  
+- Swagger / Redoc (`drf-spectacular`)  
+- `.env` (environment variables)  
+- Git + GitHub  
 
 ---
 
-## 3️⃣ Ma’lumotlar modellari
+## 2️⃣ FOYDALANUVCHI TOMONLARI
 
-### 📖 Book
+Loyiha **2 asosiy qismdan** iborat:
+
+- **User (Foydalanuvchi)**
+- **Admin (Boshqaruv paneli)**
+
+---
+
+## 3️⃣ USER TOMONI (FOYDALANUVCHI)
+
+### 📖 Imkoniyatlar
+
+- Kitoblar ro‘yxatini ko‘rish  
+- Kitob tafsilotlarini ko‘rish  
+- Savatchaga (cart) kitob qo‘shish  
+- Xarid qilish  
+
+---
+
+### 🔐 Ro‘yxatdan o‘tish / Login
+
+- Telefon raqam orqali ro‘yxatdan o‘tish  
+- Telefon raqam orqali login qilish  
+- JWT token asosida autentifikatsiya  
+
+---
+
+### 💳 Xarid jarayoni
+
+Xarid tugagandan so‘ng **2 xil holat** mavjud:
+
+1️⃣ **Online to‘lov mavjud bo‘lsa**
+- Foydalanuvchi to‘lovni platforma orqali amalga oshiradi
+- Buyurtma `paid` holatiga o‘tadi
+
+2️⃣ **Online to‘lov mavjud bo‘lmasa**
+- Foydalanuvchiga **6–8 xonali ID kod** beriladi
+- Foydalanuvchi shu ID bilan do‘kondan kitobni olib ketadi
+
+---
+
+## 4️⃣ ADMIN PANEL
+
+Admin panel quyidagi bo‘limlardan iborat:
+
+---
+
+### 📚 Kitoblarni boshqarish
+
+- Yangi kitob qo‘shish:
+  - nomi
+  - muallifi
+  - narxi
+  - soni
+  - tavsifi
+- Kitobni:
+  - tahrirlash (edit)
+  - o‘chirish (delete)
+  - sonini oshirish / kamaytirish
+
+---
+
+### 🛒 Sotib olingan kitoblar
+
+- Xarid qilingan barcha kitoblar ro‘yxati
+- Agar offline xarid bo‘lsa — **ID kodi** ko‘rinadi
+- Buyurtma holati (pending / paid / completed)
+
+---
+
+### ❌ Qolmagan kitoblar
+
+- Sotilib tugagan kitoblar alohida ro‘yxatda chiqadi
+- Stock = 0 bo‘lgan mahsulotlar
+
+---
+
+## 5️⃣ MA’LUMOTLAR MODELLARI
+
+### 👤 User
+
+```text
+id
+phone_number
+is_active
+created_at
+```
+## 5️⃣ MA’LUMOTLAR MODELLARI
+
+### 📘 Book
 
 ```text
 id
 title
 author
 price
-stock_count
+stock
 description
 created_at
+```
+## 🛒 Cart
+
+```text
+id
+user (FK)
 updated_at
 ```
-
-## 🛒 CartItem
+### 🛍 CartItem
 ```
 id
-user (FK → User)
-book (FK → Book)
+cart (FK)
+book (FK)
 quantity
-added_at
+
 ```
 
-## 🧾 Order
+### 📦 Order
 ```
 id
-user (FK → User)
-books (ManyToMany → Book through CartItem)
+user (FK)
 total_price
-status (pending / completed / cancelled)
-payment_method (online / in_store)
-pickup_code (6-8 raqamli ID)  # Agar offline xarid bo‘lsa
+order_code (6–8 digit ID)
+status (pending / paid / completed)
 created_at
-updated_at
-```
-
-## 👤 UserProfile
-```
-id
-user (OneToOne → User)
-full_name
-address
-phone
-date_of_birth
-```
-
-## 💖 Wishlist
-```
-id
-user (FK → User)
-book (FK → Book)
-added_at
-```
-
-## ⭐ Rating & Review
-```
-id
-user (FK → User)
-book (FK → Book)
-rating (1-5)
-review_text
-created_at
-updated_at
-```
-
-
-## 4️⃣ Funksional talablar
-
-## 🔐 Authentication & Authorization
-```
-User register/login
-
-JWT access & refresh token
-
-Role-based permission (Admin / User)
-```
-## 👤 User imkoniyatlari
-```
-
-Kitoblarni ko‘rib chiqish
-
-Kitobni savatchaga qo‘shish / o‘chirish
-
-Savatcha orqali xarid qilish:
-
-Online to‘lov (agar integratsiya mavjud bo‘lsa)
-
-Offline – 6–8 raqamli pickup ID olish
-
-O‘z buyurtmalarini ko‘rish
-
-Profilni boshqarish (UserProfile)
-
-Wishlistga kitob qo‘shish / o‘chirish
-
-Kitoblarga reyting va sharh qo‘yish
-```
-
-## 🛡 Admin imkoniyatlari
-```
-
-Kitob CRUD (Create, Read, Update, Delete)
-
-Kitob sonini oshirish yoki kamaytirish
-
-Sotilgan kitoblar ro‘yxatini ko‘rish
-
-Qolmagan kitoblar ro‘yxatini ko‘rish
-
-Foydalanuvchi buyurtmalarini ko‘rish va ID kodlarni tekshirish
-
-Foydalanuvchi profillari va sharhlarni boshqarish
-```
-
-## 5️⃣ Business Logic / Validation
-```
-
-❌ Kitob soni 0 dan kam bo‘lmasligi kerak
-
-❌ Xarid qilishda kitob stock_count dan oshmasligi kerak
-
-✅ Offline xarid bo‘lsa → pickup_code yaratiladi va yagona bo‘ladi
-
-✅ Order cancelled bo‘lsa → kitob stock_count tiklanadi
-
-❌ Foydalanuvchi boshqa user buyurtmalarini ko‘ra olmaydi
-
-✅ Wishlistdagi kitoblarni faqat o‘zi ko‘ra oladi
-
-✅ Reyting 1-5 oralig‘ida bo‘lish
-```
-
-
-## 6️⃣ API Endpointlar (minimum requirement)
-
-**Authentication**
-
-
-| Method | Endpoint               | Description                   | Access |
-| ------ | ---------------------- | ----------------------------- | ------ |
-| POST   | `/auth/register/`      | Yangi user ro‘yxatdan o‘tishi | Public |
-| POST   | `/auth/login/`         | Login va JWT token olish      | Public |
-| POST   | `/auth/token/refresh/` | Tokenni yangilash             | Auth   |
-
-**Books**
-
-| Method | Endpoint       | Description              | Access |
-| ------ | -------------- | ------------------------ | ------ |
-| GET    | `/books/`      | Barcha kitoblar ro‘yxati | Public |
-| GET    | `/books/{id}/` | Kitob detail             | Public |
-| POST   | `/books/`      | Yangi kitob qo‘shish     | Admin  |
-| PATCH  | `/books/{id}/` | Kitobni tahrirlash       | Admin  |
-| DELETE | `/books/{id}/` | Kitobni o‘chirish        | Admin  |
-
-
-**Cart**
-
-| Method | Endpoint      | Description                   | Access |
-| ------ | ------------- | ----------------------------- | ------ |
-| GET    | `/cart/`      | Foydalanuvchi savatchasi      | User   |
-| POST   | `/cart/`      | Kitob qo‘shish                | User   |
-| PATCH  | `/cart/{id}/` | Kitob miqdorini o‘zgartirish  | User   |
-| DELETE | `/cart/{id}/` | Kitobni savatchadan o‘chirish | User   |
-
-
-**Orders**
-
-| Method | Endpoint        | Description                 | Access      |
-| ------ | --------------- | --------------------------- | ----------- |
-| POST   | `/orders/`      | Buyurtma yaratish           | User        |
-| GET    | `/orders/me/`   | Foydalanuvchi buyurtmalari  | User        |
-| GET    | `/orders/`      | Barcha buyurtmalar ro‘yxati | Admin       |
-| GET    | `/orders/{id}/` | Buyurtma detail             | Owner/Admin |
-| PATCH  | `/orders/{id}/` | Statusni o‘zgartirish       | Admin       |
-| DELETE | `/orders/{id}/` | Buyurtmani bekor qilish     | User/Admin  |
-
-**UserProfile**
-
-| Method | Endpoint        | Description                 | Access      |
-| ------ | --------------- | --------------------------- | ----------- |
-| POST   | `/orders/`      | Buyurtma yaratish           | User        |
-| GET    | `/orders/me/`   | Foydalanuvchi buyurtmalari  | User        |
-| GET    | `/orders/`      | Barcha buyurtmalar ro‘yxati | Admin       |
-| GET    | `/orders/{id}/` | Buyurtma detail             | Owner/Admin |
-| PATCH  | `/orders/{id}/` | Statusni o‘zgartirish       | Admin       |
-| DELETE | `/orders/{id}/` | Buyurtmani bekor qilish     | User/Admin  |
-
-
-**Wishlist**
-
-| Method | Endpoint          | Description             | Access |
-| ------ | ----------------- | ----------------------- | ------ |
-| GET    | `/wishlist/`      | O‘z wishlistini ko‘rish | User   |
-| POST   | `/wishlist/`      | Kitob qo‘shish          | User   |
-| DELETE | `/wishlist/{id}/` | Kitobni o‘chirish       | User   |
-
-
-**Rating & Review**
-
-
-| Method | Endpoint               | Description               | Access      |
-| ------ | ---------------------- | ------------------------- | ----------- |
-| GET    | `/books/{id}/reviews/` | Kitob sharhlari ro‘yxati  | Public      |
-| POST   | `/books/{id}/reviews/` | Reyting va sharh qo‘shish | User        |
-| PATCH  | `/reviews/{id}/`       | Sharhni yangilash         | Owner       |
-| DELETE | `/reviews/{id}/`       | Sharhni o‘chirish         | Owner/Admin |
-
-## 8️⃣ Loyihaning struktura
 
 ```
-cyber-bookstore/
+### ## 6️⃣ BUSINESS LOGIC (ASOSIY BAHOLANADI)
+
+### ✅ Validation Rules
+
+- ❌ Stock `0` bo‘lsa kitob sotib olinmaydi  
+- ❌ Cart’da bir kitob takror qo‘shilmaydi  
+- ✅ Xarid bo‘lganda kitob soni kamayadi  
+- ❌ Begona user buyurtmasiga kira olmaydi  
+- ✅ Offline xaridda **ID kod avtomatik yaratiladi**  
+
+---
+
+## 7️⃣ PERMISSION TALABLARI
+
+Custom permission’lar:
+
+- `IsAdmin`
+- `IsAuthenticated`
+- `IsOwner`
+
+📌 Misollar:
+
+- User → faqat **o‘z cart va orderlari**
+- Admin → **barcha ma’lumotlar**
+
+---
+
+## 8️⃣ API ENDPOINTLAR (MINIMUM)
+
+```http
+POST   /auth/login/
+POST   /auth/register/
+
+GET    /books/
+GET    /books/{id}/
+
+POST   /cart/items/
+GET    /cart/
+
+POST   /orders/
+GET    /orders/me/
+
+GET    /admin/orders/
+```
+## 9️⃣ SWAGGER & README (MAJBURIY)
+
+### Swagger
+
+- Barcha endpointlar hujjatlashtirilgan  
+- Request / Response misollar mavjud  
+
+### README ichida
+
+- Project setup  
+- `.env.example`  
+- Migration & superuser  
+- API’dan foydalanish  
+
+---
+
+## 📁 PROJECT STRUCTURE
+
+```
+book_store_api/
 ├── apps/
 │   ├── users/
-│   │   ├── models.py
-│   │   ├── serializers.py
-│   │   ├── views.py
-│   │   ├── permissions.py
 │   ├── books/
-│   │   ├── models.py
-│   │   ├── serializers.py
-│   │   ├── views.py
+│   ├── cart/
 │   ├── orders/
-│   │   ├── models.py
-│   │   ├── serializers.py
-│   │   ├── views.py
+│   ├── payments/
 ├── core/
 │   ├── settings.py
 │   ├── urls.py
@@ -272,27 +234,10 @@ cyber-bookstore/
 ├── README.md
 ```
 
-## 9️⃣ Role–Endpoint Matrix
 
-| Endpoint              | Admin   | User    |
-| --------------------- | ------- | ------- |
-| Auth (login/register) | ✅       | ✅       |
-| Books CRUD            | ✅       | ❌       |
-| View Books            | ✅       | ✅       |
-| Cart CRUD             | ❌       | ✅       |
-| Create Order          | ❌       | ✅       |
-| View Own Orders       | ✅       | ✅       |
-| View All Orders       | ✅       | ❌       |
-| Change Order Status   | ✅       | ❌       |
-| Cancel Order          | ✅       | ✅       |
-| Profile CRUD          | ❌       | ✅       |
-| Wishlist CRUD         | ❌       | ✅       |
-| Rating & Review CRUD  | ✅/Owner | ✅/Owner |
+---
 
-## 📝 Swagger & API Docs
+## 👨‍💻 Author
 
-Barcha endpointlar Swagger yoki Redoc orqali hujjatlashtirilgan.
-
-Request/Response misollar keltirilgan.
-
-Query param va serializer validation mavjud.
+**Nodirbek Abloqulov**  
+Backend Developer (Python / Django / DRF)
