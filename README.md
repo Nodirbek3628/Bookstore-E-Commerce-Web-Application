@@ -1,6 +1,5 @@
-# Bookstore-E-Commerce-Web-Application
 
-# 📚 Cyber Bookstore – E-Commerce Web Application
+# 📚 Bookstore – E-Commerce Web Application
 
 
 ---
