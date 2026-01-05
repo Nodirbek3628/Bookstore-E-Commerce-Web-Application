@@ -55,14 +55,16 @@ updated_at
 ```
 
 ## 🛒 CartItem
+```
 id
 user (FK → User)
 book (FK → Book)
 quantity
 added_at
+```
 
 ## 🧾 Order
-
+```
 id
 user (FK → User)
 books (ManyToMany → Book through CartItem)
@@ -72,6 +74,7 @@ payment_method (online / in_store)
 pickup_code (6-8 raqamli ID)  # Agar offline xarid bo‘lsa
 created_at
 updated_at
+```
 
 ## 👤 UserProfile
 ```
